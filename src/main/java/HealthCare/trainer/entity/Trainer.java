@@ -34,9 +34,6 @@ public class Trainer {
     @Column(nullable = false)
     private LocalDate trainerSignUp;
 
-    @Column(nullable = true)
-    private LocalDate trainerReSign;
-
 
     /////////////////////////////////////
     // mapping
