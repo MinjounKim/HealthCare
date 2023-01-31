@@ -37,9 +37,10 @@ public class TrainerController {
     }
 
     @PatchMapping("/updateTrainer/{TrainerName}")
-    public ResponseEntity patchTrainer(@PathVariable("TrainerName") String TrainerName,
+    public ResponseEntity patchTrainer(@PathVariable("TrainerName") String trainerName,
                                         @RequestBody TrainerPatchDto trainerPatchDto){
-        Trainer trainer=trainerServer.updateTrainer(TrainerName,
+
+        Trainer trainer=trainerServer.updateTrainer(trainerName,
                 trainerMapper.TrainerPatchDtoToTrainer(trainerPatchDto));
 
         return new ResponseEntity<>(trainerMapper.TrainerToTrainerResponseDto(trainer), HttpStatus.OK);
@@ -54,17 +55,18 @@ public class TrainerController {
     }
 
     @GetMapping("{TrainerName}")
-    public ResponseEntity getTrainer(@PathVariable("TrainerName") String TrainerName){
+    public ResponseEntity getTrainer(@PathVariable("TrainerName") String trainerName){
 
-        Trainer trainer=trainerServer.findTrainer(TrainerName);
+        Trainer trainer=trainerServer.findTrainer(trainerName);
 
         return new ResponseEntity<>(trainerMapper.TrainerToTrainerResponseDto(trainer), HttpStatus.OK);
 
     }
 
     @DeleteMapping("{TrainerName}")
-    public ResponseEntity deleteTrainer(@PathVariable("TrainerName") String TrainerName){
+    public ResponseEntity deleteTrainer(@PathVariable("TrainerName") String trainerName){
 
+        trainerServer.deleteTrainer(trainerName);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
