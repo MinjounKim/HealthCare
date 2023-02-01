@@ -16,7 +16,7 @@ public class MemberServer {
 
     public Member createMember(Member member){
 
-        member.setAttendanceCount((long)0);
+        member.setAttendanceCount((long)1);
         member.setMemberSignUp(LocalDate.now());
 
         return memberRepository.save(member);

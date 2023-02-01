@@ -1,5 +1,7 @@
 package HealthCare.member.controller;
 
+import HealthCare.attendance.entity.Attendance;
+import HealthCare.attendance.server.AttendanceServer;
 import HealthCare.member.dto.MemberPatchDto;
 import HealthCare.member.dto.MemberPostDto;
 import HealthCare.member.entity.Member;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -23,11 +26,18 @@ public class MemberController {
     private final MemberServer memberServer;
     private final MemberMapper memberMapper;
 
+    private final AttendanceServer attendanceServer;
+
     @PostMapping("/signUp")
     public ResponseEntity postMember(@RequestBody MemberPostDto memberPostDto){
 
         Member member=memberServer.createMember(
                 memberMapper.memberPostDtoTomember(memberPostDto));
+
+        Attendance attendance=new Attendance();
+        attendance.setMemberName(member.getMemberName());
+
+        attendanceServer.countAttendance(attendance);
 
         return new ResponseEntity<>(memberMapper.memberTomemberResponseDto(member), HttpStatus.CREATED);
     }
