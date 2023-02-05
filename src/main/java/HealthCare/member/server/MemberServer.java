@@ -1,5 +1,6 @@
 package HealthCare.member.server;
 
+import HealthCare.attendance.server.AttendanceServer;
 import HealthCare.member.entity.Member;
 import HealthCare.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +15,34 @@ public class MemberServer {
 
     private final MemberRepository memberRepository;
 
+    private final AttendanceServer attendanceServer;
+
     public Member createMember(Member member){
 
         member.setAttendanceCount((long)1);
         member.setMemberSignUp(LocalDate.now());
 
+        memberRepository.save(member);
+
+        Member memberForAttandence=memberRepository.findByMemberName(member.getMemberName());
+
+        attendanceServer.countAttendance(memberForAttandence);
+
+        return memberForAttandence;
+    }
+
+    public Member loginMember(String memberName){
+
+        Member member=memberRepository.findByMemberName(memberName);
+
+        long count=member.getAttendanceCount();
+        count++;
+        member.setAttendanceCount(count);
+
+        attendanceServer.countAttendance(member);
+
         return memberRepository.save(member);
+
     }
 
     public Member updateMember(String memberName, Member member){
@@ -27,13 +50,9 @@ public class MemberServer {
         Member updatemember=memberRepository.findByMemberName(memberName);
 
         updatemember.setMemberName(member.getMemberName());
-
         updatemember.setMemberEmail(member.getMemberEmail());
-
         updatemember.setMemberPhone(member.getMemberPhone());
-
         updatemember.setMemberPassWord(member.getMemberPassWord());
-
 
         return memberRepository.save(updatemember);
 

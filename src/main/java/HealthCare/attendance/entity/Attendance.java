@@ -1,5 +1,6 @@
 package HealthCare.attendance.entity;
 
+import HealthCare.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,9 @@ public class Attendance {
     private Long attendanceId;
 
     @Column(nullable = false)
+    private Long memberId;
+
+    @Column(nullable = false)
     private String memberName;
 
     @Column(nullable = false)
@@ -27,5 +31,9 @@ public class Attendance {
 
     /////////////////////////////////////
     // mapping
+
+    @ManyToOne
+    @JoinColumn(name = "memberId",insertable = false,updatable = false)
+    private Member member;
 
 }

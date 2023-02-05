@@ -34,12 +34,15 @@ public class MemberController {
         Member member=memberServer.createMember(
                 memberMapper.memberPostDtoTomember(memberPostDto));
 
-        Attendance attendance=new Attendance();
-        attendance.setMemberName(member.getMemberName());
+        return new ResponseEntity<>(memberMapper.memberToMemberResponseDto(member), HttpStatus.CREATED);
+    }
 
-        attendanceServer.countAttendance(attendance);
+    @PostMapping("/login/{memberName}")
+    public ResponseEntity loginMember(@PathVariable("memberName") String memberName){
 
-        return new ResponseEntity<>(memberMapper.memberTomemberResponseDto(member), HttpStatus.CREATED);
+        Member member=memberServer.loginMember(memberName);
+
+        return new ResponseEntity<>(memberMapper.memberToMemberResponseDto(member), HttpStatus.OK);
     }
 
     @PatchMapping("/updateMember/{memberName}")
@@ -48,14 +51,14 @@ public class MemberController {
         Member member=memberServer.updateMember(memberName,
                 memberMapper.memberPatchDtoTomember(memberPatchDto));
 
-        return new ResponseEntity<>(memberMapper.memberTomemberResponseDto(member), HttpStatus.OK);
+        return new ResponseEntity<>(memberMapper.memberToMemberResponseDto(member), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity getMembers(){
         List<Member> members=memberServer.findMembers();
 
-        return new ResponseEntity<>(memberMapper.membersTomemberResponseDtos(members), HttpStatus.OK);
+        return new ResponseEntity<>(memberMapper.membersToMemberResponseDtos(members), HttpStatus.OK);
 
     }
 
@@ -64,7 +67,9 @@ public class MemberController {
 
         Member member=memberServer.findMember(memberName);
 
-        return new ResponseEntity<>(memberMapper.memberTomemberResponseDto(member), HttpStatus.OK);
+        List<Attendance> attendances=attendanceServer.getMemeberAttendances(member.getMemberName());
+
+        return new ResponseEntity<>(memberMapper.memberAndAttendancesToResponseDto(member,attendances), HttpStatus.OK);
 
     }
 

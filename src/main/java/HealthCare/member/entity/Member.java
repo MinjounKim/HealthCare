@@ -1,5 +1,6 @@
 package HealthCare.member.entity;
 
+import HealthCare.attendance.entity.Attendance;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -40,5 +43,8 @@ public class Member {
 
     /////////////////////////////////////
     // mapping
+
+    @OneToMany(mappedBy = "member",cascade = CascadeType.PERSIST)
+    private List<Attendance> attendances=new ArrayList<>();
 
 }
