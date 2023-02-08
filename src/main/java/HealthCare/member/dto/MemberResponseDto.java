@@ -2,6 +2,7 @@ package HealthCare.member.dto;
 
 import HealthCare.attendance.dto.ResponseAttendanceDto;
 import HealthCare.attendance.entity.Attendance;
+import HealthCare.inbody.dto.ResponseInbodyDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,5 +25,7 @@ public class MemberResponseDto {
     private Long attendanceCount;
 
     private List<ResponseAttendanceDto> attendances;
+
+    private List<ResponseInbodyDto> inbodies;
 
 }

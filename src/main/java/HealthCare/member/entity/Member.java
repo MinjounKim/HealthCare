@@ -1,6 +1,7 @@
 package HealthCare.member.entity;
 
 import HealthCare.attendance.entity.Attendance;
+import HealthCare.inbody.entity.Inbody;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,5 +47,8 @@ public class Member {
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.PERSIST)
     private List<Attendance> attendances=new ArrayList<>();
+
+    @OneToMany(mappedBy = "member",cascade = CascadeType.PERSIST)
+    private List<Inbody> inbodies=new ArrayList<>();
 
 }

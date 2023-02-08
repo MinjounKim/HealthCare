@@ -1,6 +1,7 @@
 package HealthCare.member.mapper;
 
 import HealthCare.attendance.entity.Attendance;
+import HealthCare.inbody.entity.Inbody;
 import HealthCare.member.dto.MemberPatchDto;
 import HealthCare.member.dto.MemberPostDto;
 import HealthCare.member.dto.MemberResponseDto;
@@ -21,4 +22,7 @@ public interface MemberMapper {
     List<MemberResponseDto> membersToMemberResponseDtos(List<Member> members);
 
     MemberResponseDto memberAndAttendancesToResponseDto(Member member, List<Attendance> attendances);
+
+    MemberResponseDto memberAndInbodiesToResponseDto(Member member, List<Inbody> inbodies);
+
 }
