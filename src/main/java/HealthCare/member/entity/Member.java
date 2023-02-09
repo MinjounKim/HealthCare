@@ -2,6 +2,7 @@ package HealthCare.member.entity;
 
 import HealthCare.attendance.entity.Attendance;
 import HealthCare.inbody.entity.Inbody;
+import HealthCare.trainer.entity.Trainer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,6 +42,7 @@ public class Member {
     @Column(nullable = false)
     private LocalDate memberSignUp;
 
+    private Long trainerId;
 
     /////////////////////////////////////
     // mapping
@@ -50,5 +52,9 @@ public class Member {
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.PERSIST)
     private List<Inbody> inbodies=new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "trainerId",insertable = false,updatable = false)
+    private Trainer trainer;
 
 }

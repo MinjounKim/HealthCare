@@ -32,11 +32,12 @@ public class MemberController {
 
     private final InbodyServer inbodyServer;
 
-    @PostMapping("/signUp")
-    public ResponseEntity postMember(@RequestBody MemberPostDto memberPostDto){
+    @PostMapping("/signUp/{trainerName}")
+    public ResponseEntity postMember(@PathVariable("trainerName") String trainerName,
+                                     @RequestBody MemberPostDto memberPostDto){
 
         Member member=memberServer.createMember(
-                memberMapper.memberPostDtoTomember(memberPostDto));
+                trainerName, memberMapper.memberPostDtoTomember(memberPostDto));
 
         return new ResponseEntity<>(memberMapper.memberToMemberResponseDto(member), HttpStatus.CREATED);
     }

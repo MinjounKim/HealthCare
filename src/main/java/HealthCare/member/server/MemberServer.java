@@ -3,6 +3,8 @@ package HealthCare.member.server;
 import HealthCare.attendance.server.AttendanceServer;
 import HealthCare.member.entity.Member;
 import HealthCare.member.repository.MemberRepository;
+import HealthCare.trainer.entity.Trainer;
+import HealthCare.trainer.repository.TrainerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +19,13 @@ public class MemberServer {
 
     private final AttendanceServer attendanceServer;
 
-    public Member createMember(Member member){
+    private final TrainerRepository trainerRepository;
 
+    public Member createMember(String trainerName, Member member){
+
+        Trainer trainer=trainerRepository.findByTrainerName(trainerName);
+
+        member.setTrainerId(trainer.getTrainerId());
         member.setAttendanceCount((long)1);
         member.setMemberSignUp(LocalDate.now());
 
