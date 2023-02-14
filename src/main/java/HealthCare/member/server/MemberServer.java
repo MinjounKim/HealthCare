@@ -6,6 +6,7 @@ import HealthCare.member.repository.MemberRepository;
 import HealthCare.trainer.entity.Trainer;
 import HealthCare.trainer.repository.TrainerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,18 +22,26 @@ public class MemberServer {
 
     private final TrainerRepository trainerRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     public Member createMember(String trainerName, Member member){
 
         Trainer trainer=trainerRepository.findByTrainerName(trainerName);
 
+        // 멤버 비밀번호 암호화
+        member.setMemberPassWord(passwordEncoder.encode(member.getMemberPassWord()));
+
+        // 멤버 초기설정
         member.setTrainerId(trainer.getTrainerId());
         member.setAttendanceCount((long)1);
         member.setMemberSignUp(LocalDate.now());
 
+        // 멤버 저장 후 id값 jpa자동생성
         memberRepository.save(member);
 
         Member memberForAttandence=memberRepository.findByMemberName(member.getMemberName());
 
+        // 자동 생성된 멤버 id값으로 출석server 저장
         attendanceServer.countAttendance(memberForAttandence);
 
         return memberForAttandence;

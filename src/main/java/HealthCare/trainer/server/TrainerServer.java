@@ -3,6 +3,7 @@ package HealthCare.trainer.server;
 import HealthCare.trainer.entity.Trainer;
 import HealthCare.trainer.repository.TrainerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.net.PortUnreachableException;
@@ -15,9 +16,13 @@ public class TrainerServer {
 
     private final TrainerRepository trainerRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     public Trainer createTrainer(Trainer trainer){
 
+        trainer.setTrainerPassWord(passwordEncoder.encode(trainer.getTrainerPassWord()));
         trainer.setTrainerSignUp(LocalDate.now());
+
 
         return trainerRepository.save(trainer);
     }
