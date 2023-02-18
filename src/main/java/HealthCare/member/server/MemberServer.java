@@ -1,6 +1,8 @@
 package HealthCare.member.server;
 
 import HealthCare.attendance.server.AttendanceServer;
+import HealthCare.exception.BusinessLogicException;
+import HealthCare.exception.ExceptionCode;
 import HealthCare.member.entity.Member;
 import HealthCare.member.repository.MemberRepository;
 import HealthCare.trainer.entity.Trainer;
@@ -28,6 +30,15 @@ public class MemberServer {
 
         Trainer trainer=trainerRepository.findByTrainerName(trainerName);
 
+        if(trainer==null){
+            throw new BusinessLogicException(ExceptionCode.Member_NOT_FOUND);
+        }
+
+        // 멤버가 있는 경우 예외 처리
+        if(memberRepository.findByMemberName(member.getMemberName())!=null){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+        }
+
         // 멤버 비밀번호 암호화
         member.setMemberPassWord(passwordEncoder.encode(member.getMemberPassWord()));
 
@@ -51,6 +62,10 @@ public class MemberServer {
 
         Member member=memberRepository.findByMemberName(memberName);
 
+        if(member==null){
+            throw new BusinessLogicException(ExceptionCode.Member_NOT_FOUND);
+        }
+
         long count=member.getAttendanceCount();
         count++;
         member.setAttendanceCount(count);
@@ -64,6 +79,10 @@ public class MemberServer {
     public Member updateMember(String memberName, Member member){
 
         Member updatemember=memberRepository.findByMemberName(memberName);
+
+        if(updatemember==null){
+            throw new BusinessLogicException(ExceptionCode.Member_NOT_FOUND);
+        }
 
         updatemember.setMemberName(member.getMemberName());
         updatemember.setMemberEmail(member.getMemberEmail());
@@ -81,12 +100,22 @@ public class MemberServer {
 
     public Member findMember(String memberName){
 
-        return memberRepository.findByMemberName(memberName);
+        Member member=memberRepository.findByMemberName(memberName);
+        if(member==null){
+            throw new BusinessLogicException(ExceptionCode.Member_NOT_FOUND);
+        }
+
+        return member;
     }
 
     public void deleteMember(String memberName){
 
         Member member=memberRepository.findByMemberName(memberName);
+
+        if(member==null){
+            throw new BusinessLogicException(ExceptionCode.Member_NOT_FOUND);
+        }
+
         memberRepository.delete(member);
     }
 }

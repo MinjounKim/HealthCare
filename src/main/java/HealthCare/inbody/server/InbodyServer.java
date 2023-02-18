@@ -1,5 +1,7 @@
 package HealthCare.inbody.server;
 
+import HealthCare.exception.BusinessLogicException;
+import HealthCare.exception.ExceptionCode;
 import HealthCare.inbody.entity.Inbody;
 import HealthCare.inbody.repository.InbodyRepository;
 import HealthCare.member.entity.Member;
@@ -22,6 +24,10 @@ public class InbodyServer {
 
         Member member=memberRepository.findByMemberName(memberName);
 
+        if(member==null){
+            throw new BusinessLogicException(ExceptionCode.Member_NOT_FOUND);
+        }
+
         inbody.setMemberId(member.getMemberId());
         inbody.setMemberName(memberName);
         inbody.setMeasurementDate(LocalDate.now());
@@ -32,6 +38,10 @@ public class InbodyServer {
 
     public List<Inbody> getMemeberInbodies(String memberName){
         Member member=memberRepository.findByMemberName(memberName);
+
+        if(member==null){
+            throw new BusinessLogicException(ExceptionCode.Member_NOT_FOUND);
+        }
 
         return inbodyRepository.findByMemberId(member.getMemberId());
     }

@@ -1,5 +1,7 @@
 package HealthCare.trainer.server;
 
+import HealthCare.exception.BusinessLogicException;
+import HealthCare.exception.ExceptionCode;
 import HealthCare.trainer.entity.Trainer;
 import HealthCare.trainer.repository.TrainerRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,11 @@ public class TrainerServer {
 
     public Trainer createTrainer(Trainer trainer){
 
+        // 트레이너가 이미 있는 경우 예외처리
+        if(trainerRepository.findByTrainerName(trainer.getTrainerName())!=null){
+            throw new BusinessLogicException(ExceptionCode.TRAINER_EXISTS);
+        }
+
         trainer.setTrainerPassWord(passwordEncoder.encode(trainer.getTrainerPassWord()));
         trainer.setTrainerSignUp(LocalDate.now());
 
@@ -30,6 +37,10 @@ public class TrainerServer {
     public Trainer updateTrainer(String trainerName, Trainer trainer){
 
         Trainer updateTrainer=trainerRepository.findByTrainerName(trainerName);
+
+        if(updateTrainer==null){
+            throw new BusinessLogicException(ExceptionCode.Trainer_NOT_FOUND);
+        }
 
         updateTrainer.setTrainerName(trainer.getTrainerName());
 
@@ -51,12 +62,21 @@ public class TrainerServer {
 
     public Trainer findTrainer(String TrainerName){
 
+        if(trainerRepository.findByTrainerName(TrainerName)==null){
+            throw new BusinessLogicException(ExceptionCode.Trainer_NOT_FOUND);
+        }
+
         return trainerRepository.findByTrainerName(TrainerName);
     }
 
     public void deleteTrainer(String TrainerName){
 
         Trainer trainer=trainerRepository.findByTrainerName(TrainerName);
+
+        if(trainer==null){
+            throw new BusinessLogicException(ExceptionCode.Trainer_NOT_FOUND);
+        }
+
         trainerRepository.delete(trainer);
     }
 }
