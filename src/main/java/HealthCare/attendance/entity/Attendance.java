@@ -29,6 +29,9 @@ public class Attendance {
     @Column(nullable = false)
     private LocalDate attendanceDate;
 
+    @Column(nullable = true)
+    private String count;
+
     /////////////////////////////////////
     // mapping
 

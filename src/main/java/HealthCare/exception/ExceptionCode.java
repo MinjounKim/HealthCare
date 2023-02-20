@@ -8,6 +8,9 @@ public enum ExceptionCode {
 
     MEMBER_EXISTS(409, "Member exists"),
     TRAINER_EXISTS(409, "Trainer exists"),
+
+    PASSWORD_NO_MATCH(401, "잘못된 비밀번호 입니다."),
+
     EMAIL_EXISTS(409,"이미 가입된 이메일 입니다."),
     PHONE_EXISTS(409,"이미 가입된 휴대폰 번호입니다."),
 

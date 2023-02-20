@@ -1,5 +1,6 @@
 package HealthCare.member.server;
 
+import HealthCare.attendance.entity.Attendance;
 import HealthCare.attendance.server.AttendanceServer;
 import HealthCare.exception.BusinessLogicException;
 import HealthCare.exception.ExceptionCode;
@@ -58,7 +59,7 @@ public class MemberServer {
         return memberForAttandence;
     }
 
-    public Member loginMember(String memberName){
+    public Member loginMember(String memberName,String memberPassWord){
 
         Member member=memberRepository.findByMemberName(memberName);
 
@@ -66,14 +67,20 @@ public class MemberServer {
             throw new BusinessLogicException(ExceptionCode.Member_NOT_FOUND);
         }
 
-        long count=member.getAttendanceCount();
-        count++;
-        member.setAttendanceCount(count);
+        if(!passwordEncoder.matches(memberPassWord,member.getMemberPassWord())){
+            throw new BusinessLogicException(ExceptionCode.PASSWORD_NO_MATCH);
+        }
 
-        attendanceServer.countAttendance(member);
+        List<Attendance> attendances=attendanceServer.getAttendance();
+        if(!attendances.get(attendances.size()-1).getAttendanceDate().isEqual(LocalDate.now())){
+            long count=member.getAttendanceCount();
+            count++;
+            member.setAttendanceCount(count);
+
+            attendanceServer.countAttendance(member);
+        }
 
         return memberRepository.save(member);
-
     }
 
     public Member updateMember(String memberName, Member member){

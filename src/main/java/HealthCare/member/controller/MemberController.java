@@ -4,6 +4,7 @@ import HealthCare.attendance.entity.Attendance;
 import HealthCare.attendance.server.AttendanceServer;
 import HealthCare.inbody.entity.Inbody;
 import HealthCare.inbody.server.InbodyServer;
+import HealthCare.member.dto.MemberLoginDto;
 import HealthCare.member.dto.MemberPatchDto;
 import HealthCare.member.dto.MemberPostDto;
 import HealthCare.member.entity.Member;
@@ -42,10 +43,11 @@ public class MemberController {
         return new ResponseEntity<>(memberMapper.memberToMemberResponseDto(member), HttpStatus.CREATED);
     }
 
-    @PostMapping("/login/{memberName}")
-    public ResponseEntity loginMember(@PathVariable("memberName") String memberName){
+    @PostMapping("/login")
+    public ResponseEntity loginMember(@RequestBody MemberLoginDto memberLoginDto){
 
-        Member member=memberServer.loginMember(memberName);
+        Member member=memberServer.loginMember(
+                memberLoginDto.getMemberName(),memberLoginDto.getMemberPassWord());
 
         return new ResponseEntity<>(memberMapper.memberToMemberResponseDto(member), HttpStatus.OK);
     }

@@ -55,6 +55,26 @@ public class TrainerServer {
 
     }
 
+    public Trainer LoginTrainer(String trainerName,String trainerPassWord){
+
+        Trainer trainer=trainerRepository.findByTrainerName(trainerName);
+        if(trainer==null){
+            throw new BusinessLogicException(ExceptionCode.Trainer_NOT_FOUND);
+        }
+
+        if(!passwordEncoder.matches(trainerPassWord,trainer.getTrainerPassWord())){
+            throw new BusinessLogicException(ExceptionCode.PASSWORD_NO_MATCH);
+        }
+
+        /////////////////////////////////////////
+        // 토큰 생성
+
+
+        /////////////////////////////////////////
+
+        return trainer;
+    }
+
     public List<Trainer> findTrainers(){
 
         return trainerRepository.findAll();

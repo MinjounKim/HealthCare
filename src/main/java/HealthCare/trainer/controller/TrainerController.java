@@ -1,5 +1,6 @@
 package HealthCare.trainer.controller;
 
+import HealthCare.trainer.dto.TrainerLoginDto;
 import HealthCare.trainer.dto.TrainerPatchDto;
 import HealthCare.trainer.dto.TrainerPostDto;
 import HealthCare.trainer.entity.Trainer;
@@ -23,8 +24,6 @@ public class TrainerController {
 
     private final TrainerServer trainerServer;
 
-    private final TrainerRepository trainerRepository;
-
     private final TrainerMapper trainerMapper;
 
     @PostMapping("/signUp")
@@ -44,6 +43,16 @@ public class TrainerController {
                 trainerMapper.TrainerPatchDtoToTrainer(trainerPatchDto));
 
         return new ResponseEntity<>(trainerMapper.TrainerToTrainerResponseDto(trainer), HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity loginTrainer(@RequestBody TrainerLoginDto trainerLoginDto){
+
+        Trainer trainer=trainerServer.LoginTrainer(
+                trainerLoginDto.getTrainerName(),trainerLoginDto.getTrainerPassWord());
+
+        return new ResponseEntity<>(trainerMapper.TrainerToTrainerResponseDto(trainer), HttpStatus.OK);
+
     }
 
     @GetMapping
