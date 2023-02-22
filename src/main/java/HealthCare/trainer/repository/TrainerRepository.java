@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface TrainerRepository extends JpaRepository<Trainer, Long> {
 
     Trainer findByTrainerName(String trainerName);
+
+    Trainer findByTrainerPhone(String trainerPhone);
 }

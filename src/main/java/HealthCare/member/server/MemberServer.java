@@ -32,11 +32,12 @@ public class MemberServer {
         Trainer trainer=trainerRepository.findByTrainerName(trainerName);
 
         if(trainer==null){
-            throw new BusinessLogicException(ExceptionCode.Member_NOT_FOUND);
+            throw new BusinessLogicException(ExceptionCode.Trainer_NOT_FOUND);
         }
 
         // 멤버가 있는 경우 예외 처리
-        if(memberRepository.findByMemberName(member.getMemberName())!=null){
+        // 이름은 중복허용, 번호는 중복되는 경우는 없으니 번호로 중복 체크
+        if(memberRepository.findByMemberPhone(member.getMemberPhone())!=null){
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
         }
 

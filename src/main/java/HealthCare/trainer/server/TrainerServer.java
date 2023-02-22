@@ -23,7 +23,8 @@ public class TrainerServer {
     public Trainer createTrainer(Trainer trainer){
 
         // 트레이너가 이미 있는 경우 예외처리
-        if(trainerRepository.findByTrainerName(trainer.getTrainerName())!=null){
+        // 이름은 중복허용, 번호는 중복되는 경우는 없으니 번호로 중복 체크
+        if(trainerRepository.findByTrainerPhone(trainer.getTrainerPhone())!=null){
             throw new BusinessLogicException(ExceptionCode.TRAINER_EXISTS);
         }
 
